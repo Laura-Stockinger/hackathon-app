@@ -1,6 +1,7 @@
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/create_page.dart';
 
 import 'amplifyconfiguration.dart';
 import 'models/ModelProvider.dart';
@@ -40,15 +41,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Todos'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
-  final String title;
+  final String title = 'Todos';
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -106,24 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          safePrint("test");
-          final newTask = Task(
-            name: "Random Todo ${DateTime.now().toIso8601String()}",
-            description: "bla bla",
-            isDone: false,
-            category: "General",
-            deadline: TemporalDate.now(),
-          );
-          final request = ModelMutations.create(newTask);
-          final response = await Amplify.API.mutate(request: request).response;
-          if (response.hasErrors) {
-            safePrint('Creating task failed.');
-          } else {
-            safePrint('Creating task successful.');
-          }
-          _refreshTasks();
-        },
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CreatePage()),
+        ).then((result) {_refreshTasks();}),
         tooltip: 'Add task',
         child: const Icon(Icons.add),
       ),
