@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => TaskPage(key: ValueKey(task.hashCode), task: task)),
-                ),
+                ).then((result) {_refreshTasks();}),
               );
             }).toList(),	
           ),

@@ -1,3 +1,5 @@
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'models/Task.dart';
 
@@ -22,6 +24,20 @@ class TaskPage extends StatelessWidget {
             Text('Deadline: ${task.deadline}'),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final request = ModelMutations.delete(task);
+          final response = await Amplify.API.mutate(request: request).response;
+          if (response.hasErrors) {
+            safePrint('Deleting task failed.');
+          } else {
+            safePrint('Deleting task successful.');
+          }
+          Navigator.pop(context);
+        },
+        tooltip: 'Delete task',
+        child: const Icon(Icons.delete),
       ),
     );
   }
