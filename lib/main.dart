@@ -37,12 +37,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kraftwerk App',
+      title: 'Todo App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Kraftwerk Räume'),
+      home: const MyHomePage(title: 'Todos'),
     );
   }
 }
@@ -59,7 +59,7 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Room> rooms = [Room(name: 'Wendelstein', description: 'Ist es ein Raum? Ist es ein Berg?', numberOfSeats: 6)];
+  List<Room> rooms = [];
 
   void _incrementCounter() {
     setState(() {

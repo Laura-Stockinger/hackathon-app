@@ -7,13 +7,21 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Room: a
+  Task: a
     .model({
       name: a.string(),
       description: a.string(),
-      numberOfSeats: a.integer(),
+      category: a.string(),
+      isDone: a.boolean(),
+      deadline: a.date(),
     })
-    .authorization(allow => [allow.publicApiKey()])
+    .authorization(allow => [allow.publicApiKey()]),
+
+    Category: a
+      .model({
+        name: a.string(),
+      })
+      .authorization(allow => [allow.publicApiKey()]),
 });
 
 // Used for code completion / highlighting when making requests from frontend
