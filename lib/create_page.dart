@@ -15,6 +15,8 @@ class TaskFormState extends State<CreatePage> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final categoryController = TextEditingController();
+  final horizontalPadding = 16.0;
+  final verticalPadding = 8.0;
 
   @override
   void dispose() {
@@ -31,26 +33,40 @@ class TaskFormState extends State<CreatePage> {
       ),
       body: Column(
         children: [
-          TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Name'
+          Padding(
+            padding: EdgeInsets.only(
+              left: horizontalPadding, 
+              right: horizontalPadding, 
+              top: 2 * verticalPadding, 
+              bottom: verticalPadding
             ),
-            controller: nameController,
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Name'
+              ),
+              controller: nameController,
+            ),
           ),
-          TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Description'
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Description'
+              ),
+              controller: descriptionController,
             ),
-            controller: descriptionController,
           ),
-          TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Category'
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Category'
+              ),
+              controller: categoryController,
             ),
-            controller: categoryController,
           ),
         ],
       ),
