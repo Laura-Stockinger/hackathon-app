@@ -4,8 +4,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 
 import 'amplifyconfiguration.dart';
-import 'models/room.dart';
-import 'room_page.dart';
+import 'models/Task.dart';
+import 'task_page.dart';
 
 void main() {
   _configureAmplify();
@@ -59,13 +59,31 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Room> rooms = [];
+  List<Task> _tasks = [];
 
-  void _incrementCounter() {
-    setState(() {
-      // rooms.add('value');
-    });
+  @override
+  void initState() {
+    super.initState();
+    _refreshTasks();
   }
+  
+  Future<void> _refreshTasks() async {
+  try {
+    final request = ModelQueries.list(Task.classType);
+    final response = await Amplify.API.query(request: request).response;
+
+    final todos = response.data?.items;
+    if (response.hasErrors) {
+      safePrint('errors: ${response.errors}');
+      return;
+    }
+    setState(() {
+      _tasks = todos!.whereType<Task>().toList();
+    });
+  } on ApiException catch (e) {
+    safePrint('Query failed: $e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -74,22 +92,40 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: ListView(
-          children: rooms.map((room) {
-            return ListTile(
-              title: Text(room.name),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RoomPage(key: ValueKey(room.hashCode), room: room)),
-              ),
-            );
-          }).toList(),	
-        ),
+      body: _tasks.isEmpty == true 
+        ? const Center(child: Text('No tasks')) 
+        : Center(
+          child: ListView(
+            children: _tasks.map((task) {
+              return ListTile(
+                title: Text(task.name!),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TaskPage(key: ValueKey(task.hashCode), task: task)),
+                ),
+              );
+            }).toList(),	
+          ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Add room',
+        onPressed: () async {
+          final newTask = Task(
+            id: uuid(),
+            name: "Random Todo ${DateTime.now().toIso8601String()}",
+            description: "bla bla",
+            isDone: false,
+            category: "General",
+            deadline: TemporalDate.now(),
+          );
+          final request = ModelMutations.create(newTask);
+          final response = await Amplify.API.mutate(request: request).response;
+          if (response.hasErrors) {
+            safePrint('Creating task failed.');
+          } else {
+            safePrint('Creating task successful.');
+          }
+        },
+        tooltip: 'Add task',
         child: const Icon(Icons.add),
       ),
     );
