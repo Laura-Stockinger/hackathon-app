@@ -4,7 +4,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 
 import 'amplifyconfiguration.dart';
-import 'models/Task.dart';
+import 'models/ModelProvider.dart';
 import 'task_page.dart';
 
 void main() {
@@ -19,7 +19,7 @@ Future<void> _configureAmplify() async {
         AmplifyAuthCognito(),
         AmplifyAPI(
           options: APIPluginOptions(
-            //modelProvider: ModelProvider.instance,
+            modelProvider: ModelProvider.instance,
           ),
         ),
       ],
