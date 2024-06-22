@@ -23,13 +23,15 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the Room type in your schema. */
-class Room extends amplify_core.Model {
-  static const classType = const _RoomModelType();
+/** This is an auto generated class representing the Task type in your schema. */
+class Task extends amplify_core.Model {
+  static const classType = const _TaskModelType();
   final String id;
   final String? _name;
   final String? _description;
-  final int? _numberOfSeats;
+  final String? _category;
+  final bool? _isDone;
+  final amplify_core.TemporalDate? _deadline;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -40,8 +42,8 @@ class Room extends amplify_core.Model {
   @override
   String getId() => id;
   
-  RoomModelIdentifier get modelIdentifier {
-      return RoomModelIdentifier(
+  TaskModelIdentifier get modelIdentifier {
+      return TaskModelIdentifier(
         id: id
       );
   }
@@ -54,8 +56,16 @@ class Room extends amplify_core.Model {
     return _description;
   }
   
-  int? get numberOfSeats {
-    return _numberOfSeats;
+  String? get category {
+    return _category;
+  }
+  
+  bool? get isDone {
+    return _isDone;
+  }
+  
+  amplify_core.TemporalDate? get deadline {
+    return _deadline;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -66,14 +76,16 @@ class Room extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Room._internal({required this.id, name, description, numberOfSeats, createdAt, updatedAt}): _name = name, _description = description, _numberOfSeats = numberOfSeats, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Task._internal({required this.id, name, description, category, isDone, deadline, createdAt, updatedAt}): _name = name, _description = description, _category = category, _isDone = isDone, _deadline = deadline, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Room({String? id, String? name, String? description, int? numberOfSeats}) {
-    return Room._internal(
+  factory Task({String? id, String? name, String? description, String? category, bool? isDone, amplify_core.TemporalDate? deadline}) {
+    return Task._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       name: name,
       description: description,
-      numberOfSeats: numberOfSeats);
+      category: category,
+      isDone: isDone,
+      deadline: deadline);
   }
   
   bool equals(Object other) {
@@ -83,11 +95,13 @@ class Room extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Room &&
+    return other is Task &&
       id == other.id &&
       _name == other._name &&
       _description == other._description &&
-      _numberOfSeats == other._numberOfSeats;
+      _category == other._category &&
+      _isDone == other._isDone &&
+      _deadline == other._deadline;
   }
   
   @override
@@ -97,11 +111,13 @@ class Room extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Room {");
+    buffer.write("Task {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("description=" + "$_description" + ", ");
-    buffer.write("numberOfSeats=" + (_numberOfSeats != null ? _numberOfSeats!.toString() : "null") + ", ");
+    buffer.write("category=" + "$_category" + ", ");
+    buffer.write("isDone=" + (_isDone != null ? _isDone!.toString() : "null") + ", ");
+    buffer.write("deadline=" + (_deadline != null ? _deadline!.format() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -109,56 +125,68 @@ class Room extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Room copyWith({String? name, String? description, int? numberOfSeats}) {
-    return Room._internal(
+  Task copyWith({String? name, String? description, String? category, bool? isDone, amplify_core.TemporalDate? deadline}) {
+    return Task._internal(
       id: id,
       name: name ?? this.name,
       description: description ?? this.description,
-      numberOfSeats: numberOfSeats ?? this.numberOfSeats);
+      category: category ?? this.category,
+      isDone: isDone ?? this.isDone,
+      deadline: deadline ?? this.deadline);
   }
   
-  Room copyWithModelFieldValues({
+  Task copyWithModelFieldValues({
     ModelFieldValue<String?>? name,
     ModelFieldValue<String?>? description,
-    ModelFieldValue<int?>? numberOfSeats
+    ModelFieldValue<String?>? category,
+    ModelFieldValue<bool?>? isDone,
+    ModelFieldValue<amplify_core.TemporalDate?>? deadline
   }) {
-    return Room._internal(
+    return Task._internal(
       id: id,
       name: name == null ? this.name : name.value,
       description: description == null ? this.description : description.value,
-      numberOfSeats: numberOfSeats == null ? this.numberOfSeats : numberOfSeats.value
+      category: category == null ? this.category : category.value,
+      isDone: isDone == null ? this.isDone : isDone.value,
+      deadline: deadline == null ? this.deadline : deadline.value
     );
   }
   
-  Room.fromJson(Map<String, dynamic> json)  
+  Task.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name'],
       _description = json['description'],
-      _numberOfSeats = (json['numberOfSeats'] as num?)?.toInt(),
+      _category = json['category'],
+      _isDone = json['isDone'],
+      _deadline = json['deadline'] != null ? amplify_core.TemporalDate.fromString(json['deadline']) : null,
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'numberOfSeats': _numberOfSeats, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name, 'description': _description, 'category': _category, 'isDone': _isDone, 'deadline': _deadline?.format(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
     'name': _name,
     'description': _description,
-    'numberOfSeats': _numberOfSeats,
+    'category': _category,
+    'isDone': _isDone,
+    'deadline': _deadline,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<RoomModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<RoomModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<TaskModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TaskModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final NAME = amplify_core.QueryField(fieldName: "name");
   static final DESCRIPTION = amplify_core.QueryField(fieldName: "description");
-  static final NUMBEROFSEATS = amplify_core.QueryField(fieldName: "numberOfSeats");
+  static final CATEGORY = amplify_core.QueryField(fieldName: "category");
+  static final ISDONE = amplify_core.QueryField(fieldName: "isDone");
+  static final DEADLINE = amplify_core.QueryField(fieldName: "deadline");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Room";
-    modelSchemaDefinition.pluralName = "Rooms";
+    modelSchemaDefinition.name = "Task";
+    modelSchemaDefinition.pluralName = "Tasks";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -175,21 +203,33 @@ class Room extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Room.NAME,
+      key: Task.NAME,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Room.DESCRIPTION,
+      key: Task.DESCRIPTION,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Room.NUMBEROFSEATS,
+      key: Task.CATEGORY,
       isRequired: false,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Task.ISDONE,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.bool)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Task.DEADLINE,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.date)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
@@ -208,29 +248,29 @@ class Room extends amplify_core.Model {
   });
 }
 
-class _RoomModelType extends amplify_core.ModelType<Room> {
-  const _RoomModelType();
+class _TaskModelType extends amplify_core.ModelType<Task> {
+  const _TaskModelType();
   
   @override
-  Room fromJson(Map<String, dynamic> jsonData) {
-    return Room.fromJson(jsonData);
+  Task fromJson(Map<String, dynamic> jsonData) {
+    return Task.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Room';
+    return 'Task';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Room] in your schema.
+ * of [Task] in your schema.
  */
-class RoomModelIdentifier implements amplify_core.ModelIdentifier<Room> {
+class TaskModelIdentifier implements amplify_core.ModelIdentifier<Task> {
   final String id;
 
-  /** Create an instance of RoomModelIdentifier using [id] the primary key. */
-  const RoomModelIdentifier({
+  /** Create an instance of TaskModelIdentifier using [id] the primary key. */
+  const TaskModelIdentifier({
     required this.id});
   
   @override
@@ -248,7 +288,7 @@ class RoomModelIdentifier implements amplify_core.ModelIdentifier<Room> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'RoomModelIdentifier(id: $id)';
+  String toString() => 'TaskModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -256,7 +296,7 @@ class RoomModelIdentifier implements amplify_core.ModelIdentifier<Room> {
       return true;
     }
     
-    return other is RoomModelIdentifier &&
+    return other is TaskModelIdentifier &&
       id == other.id;
   }
   
