@@ -109,8 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          safePrint("test");
           final newTask = Task(
-            id: uuid(),
             name: "Random Todo ${DateTime.now().toIso8601String()}",
             description: "bla bla",
             isDone: false,
@@ -124,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             safePrint('Creating task successful.');
           }
+          _refreshTasks();
         },
         tooltip: 'Add task',
         child: const Icon(Icons.add),
